@@ -1,0 +1,26 @@
+name: Daily Product Scraper
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Runs at 8am UTC daily
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma
+        run: npx prisma generate
+
+      - name: Run Scraper Script
+        run: npm run scrape
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
