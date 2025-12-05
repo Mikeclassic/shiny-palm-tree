@@ -1,23 +1,19 @@
-name: Daily Product Scraper
+name: Database Schema Push
 
 on:
-  schedule:
-    - cron: '0 8 * * *' # Runs daily at 8am
   workflow_dispatch:
 
 jobs:
-  scrape:
+  push-schema:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install Dependencies
+      - name: Install Deps
         run: npm ci
-      - name: Generate Prisma
-        run: npx prisma generate
-      - name: Run Scraper
-        run: npm run scrape
+      - name: Push DB Schema
+        run: npx prisma db push
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}

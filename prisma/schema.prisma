@@ -14,7 +14,6 @@ model User {
   credits   Int      @default(5)
   isPro     Boolean  @default(false)
   createdAt DateTime @default(now())
-  savedProducts SavedProduct[]
 }
 
 model Product {
@@ -25,15 +24,4 @@ model Product {
   sourceUrl   String
   aesthetic   String?  @default("Y2K")
   createdAt   DateTime @default(now())
-  savedBy     SavedProduct[]
-}
-
-model SavedProduct {
-  id        String   @id @default(cuid())
-  userId    String
-  productId String
-  user      User     @relation(fields: [userId], references: [id])
-  product   Product  @relation(fields: [productId], references: [id])
-
-  @@unique([userId, productId])
 }
